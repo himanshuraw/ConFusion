@@ -24,9 +24,7 @@ class CommentForm extends Component {
     }
 
     handleCommentFormSubmit(values) {
-        console.log("Current State is: " + JSON.stringify(values));
-        alert("Current State is: " + JSON.stringify(values));
-
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
 
     }
 
@@ -173,7 +171,7 @@ function RenderDish({dish}){
     }
   }
 
-  function RenderComments({dish,comments}){
+  function RenderComments({dish,comments, addComment,dishId}){
     if(comments == null){
       return (<div></div>)
     }
@@ -198,7 +196,7 @@ function RenderDish({dish}){
         <ul className="list-unstyle">
           {cmnts}
         </ul>
-        <CommentForm dish={dish} comments={comments}/>
+        <CommentForm dish={dish} comments={comments} dishId={dishId} addComment={addComment}/>
       </div>
     )
   }
@@ -223,7 +221,9 @@ function RenderDish({dish}){
         </div>
         <div className="row justify-content-center">
           <RenderDish dish = {props.dish}/>
-          <RenderComments  comments = {props.comments}/>
+          <RenderComments  comments = {props.comments}
+            addComment={props.addComment}
+            dishId={props.dish.id}/>
         </div>
       </div>
       

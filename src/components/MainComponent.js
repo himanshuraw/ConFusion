@@ -9,6 +9,7 @@ import About from './AboutComponent';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { addComment } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
@@ -18,6 +19,10 @@ const mapStateToProps = state => {
       leaders: state.leaders
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+ addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+})
 
 const withRouter = (Component) => {
   const Wrapper = (props) => {
@@ -57,6 +62,7 @@ class Main extends Component{
       return(
         <DishDetail dish={this.props.dishes.filter((dish)=> dish.id === Number(dishId))[0]}
           comments={this.props.comments.filter((comment)=> comment.dishId === Number(dishId))}
+          addComment={this.props.addComment}
         />
       );
     }
@@ -78,5 +84,5 @@ class Main extends Component{
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
 

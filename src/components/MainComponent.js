@@ -8,6 +8,7 @@ import Contact from './ContactComponent';
 import About from './AboutComponent';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 const mapStateToProps = state => {
     return {
@@ -21,10 +22,11 @@ const mapStateToProps = state => {
 const withRouter = (Component) => {
   const Wrapper = (props) => {
     const history = useNavigate();
-    
+    const params = useParams();
     return (
       <Component
         history={history}
+        params= {useParams}
         {...props}
         />
     );
@@ -50,10 +52,11 @@ class Main extends Component{
       );
     }
 
-    const DishWithId =({match}) => {
+    const DishWithId = () => {
+      const {dishId} = useParams();
       return(
-        <DishDetail dish={this.props.dishes.filter((dish)=> dish.id === parseInt(match.params.dishId,10))[0]}
-          comments={this.props.comments.filter((comment)=> comment.dishId === parseInt(match.param.dishId,10))[0]}
+        <DishDetail dish={this.props.dishes.filter((dish)=> dish.id === Number(dishId))[0]}
+          comments={this.props.comments.filter((comment)=> comment.dishId === Number(dishId))}
         />
       );
     }
@@ -63,8 +66,8 @@ class Main extends Component{
         <Header/>
         <Routes>
           <Route path="/home" element={<HomePage/>}/>
-          <Route exact path="/menu" element={<Menu dishes={this.props.dishes}/>}/>
-          <Route path="/meny/:dishId" element={<DishWithId/>}/>
+          <Route path="/menu" element={<Menu dishes={this.props.dishes}/>}/>
+          <Route path="/menu/:dishId" element={<DishWithId />}/>
           <Route exact path="/contactus" element={<Contact/>}/>
           <Route exact path="/aboutus" element={<About leaders={this.props.leaders}/>}/>
           <Route path="/" element={<HomePage/>}/>
@@ -76,3 +79,4 @@ class Main extends Component{
 }
 
 export default withRouter(connect(mapStateToProps)(Main));
+
